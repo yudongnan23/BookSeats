@@ -15,9 +15,12 @@
 * 抓取登陆请求的数据类型及结构
 
 
-![login](https://github.com/yudongnan23/BookSeats/blob/master/login.jpg)
+![logindata](https://github.com/yudongnan23/BookSeats/blob/master/logindata.jpg)
 
 
 * 抓取预约座位时请求的Url
 * 抓取预约座位时向客户端请求的数据及结构
+
+
+![book](https://github.com/yudongnan23/BookSeats/blob/master/book.jpg)
 
