@@ -12,8 +12,12 @@
 ## 抓包过程
 ### 在抓包的过程中需要弄清楚的几个问题
 * 抓取登陆请求的Url
-![login](C:\Users\dell\Desktop\login.jpg)
 * 抓取登陆请求的数据类型及结构
+
+
+![login](https://github.com/yudongnan23/BookSeats/blob/master/login.jpg)
+
+
 * 抓取预约座位时请求的Url
 * 抓取预约座位时向客户端请求的数据及结构
 
