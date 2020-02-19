@@ -41,10 +41,10 @@ class Book:
         # take user_id, user password seat_id, book start time, book time and room name as instance variables
         self.user_Id = user_id
         self.user_password = user_password
-        self.seat_Id = self.__get_seat_id(seat_number, room_name)
+        self.room_name = room_name
+        self.seat_Id = self.__get_seat_id(seat_number)
         self.time_start = self.__get_timestamp(time_start)
         self.book_time = str(int(book_time) * one_hour_timestamp)
-        self.room_name = room_name
 
         # get the complete login data
         self.login_data = LOGIN_BASE_DATA
@@ -104,27 +104,24 @@ class Book:
             ))
         return time_stamp
 
-    def __get_seat_id(self, seat_number, room_name):
+    def __get_seat_id(self, seat_number):
         """ get the seats id from START_ID_OF_FLOOR_DICT in book_config.py.
         there is four rooms which can book.
 
         :param seat_number: the seat number
             :type: int
-        :param room_name: the room name
-            :type: string
-            example: 二楼南
         :return: add 26198 to seat number and change it to str type
             :type: str
         """
-        base_id = START_ID_OF_FLOOR_DICT[room_name]
+        base_id = START_ID_OF_FLOOR_DICT[self.room_name]
         # get the seat id in four different rooms
         if type(base_id) == int:
-            if room_name == "二楼南" and seat_number > 128:
+            if self.room_name == "二楼南" and seat_number > 128:
                 base_id = base_id + 1
             seat_number = seat_number + base_id
             seat_id = str(seat_number)
         else:
-            seat_id = base_id[seat_number]
+            seat_id = base_id[int(seat_number)]
         return seat_id
 
     def login(self):
@@ -213,7 +210,7 @@ class Book:
         if "result" in result_dict["DATA"].keys() and result_dict["DATA"]["result"] == "success":
             book_info = "{}，恭喜您，座位预约成功！\n座位号：{}\n开始时间：{}\n预约时长：{}小时".format(
                 user_name,
-                result_dict["DATA"]["lab_content_org_id"],
+                self.__get_seat_number(),
                 time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(self.time_start))),
                 str(int(int(self.book_time) / one_hour_timestamp))
             )
@@ -233,6 +230,23 @@ class Book:
         else:
             book_info = result_dict["CODE"]
         return book_info, book_result
+
+    def __get_seat_number(self) -> str:
+        """ get the seat number by seat id and room
+
+        :return:
+        """
+        seat_number = 0
+        seat_number_info = START_ID_OF_FLOOR_DICT[self.room_name]
+        if type(seat_number_info) == dict:
+            for key, value in seat_number_info.items():
+                if value == self.seat_Id:
+                    seat_number = key
+        else:
+            if self.room_name == "二楼南" and seat_number > 128:
+                seat_number_info = seat_number_info + 1
+            seat_number = str(int(self.seat_Id) - seat_number_info)
+        return seat_number
 
     def __get_seats_info(self):
         """ get free seats info with book data.
